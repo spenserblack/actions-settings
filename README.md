@@ -1,5 +1,8 @@
 # Settings
 
+[![CI](https://github.com/spenserblack/actions-settings/actions/workflows/ci.yml/badge.svg)](https://github.com/spenserblack/actions-settings/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/spenserblack/actions-settings/graph/badge.svg?token=BgX9l57lyg)](https://codecov.io/gh/spenserblack/actions-settings)
+
 This is a GitHub action that helps manage settings via a `.github/settings.yml` file.
 
 By using this file, settings are checked into version control, and outside contributors
