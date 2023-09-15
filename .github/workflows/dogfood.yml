@@ -3,6 +3,8 @@ name: Dogfood
 on:
   push:
     branches: [main]
+    paths:
+      - ".github/settings.yml"
 
 jobs:
   settings:
