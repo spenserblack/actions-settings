@@ -18,9 +18,14 @@ a user trusted with push access to modify.
 
 ### Using a PAT
 
-You must generate a personal access token, as this action needs heightened permissions to modify
+You must generate a personal access token (PAT), as this action needs heightened permissions to modify
 settings. It is recommended to create a fine-grained token and limit it to only relevant
 repositories.
+
+The PAT will need administration rights to modify
+
+- The description
+- Topics
 
 ### The settings file
 
@@ -28,7 +33,7 @@ The default path is `.github/settings.yml`.
 
 ```yaml
 # The repository's description
-description: 'foo'
+description: "foo"
 topics:
   - topic-1
   - topic-2
