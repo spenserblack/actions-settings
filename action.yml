@@ -7,7 +7,6 @@ inputs:
   token:
     description: "The GitHub token to use"
     required: true
-    default: ${{ github.token }}
   path:
     description: "The path to the settings file"
     required: true

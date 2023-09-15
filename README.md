@@ -13,3 +13,9 @@ are able to suggest changes to settings using pull requests.
 This action will not support all settings. This action effectively heightens push access
 to admin access, so this action will only support settings that are reasonably safe for
 a user trusted with push access to modify.
+
+## Usage
+
+You must generate a personal access token, as this action needs heightened permissions to modify
+settings. It is recommended to create a fine-grained token and limit it to only relevant
+repositories

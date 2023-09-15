@@ -1,0 +1,17 @@
+name: Dogfood
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  settings:
+    name: Update Settings
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update Settings
+        uses: ./
+        with:
+          token: ${{ secrets.PAT }}
