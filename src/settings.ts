@@ -4,6 +4,7 @@ import { readFileSync } from "fs";
 
 const SettingsSchema = z.object({
   description: z.optional(z.string()),
+  topics: z.optional(z.array(z.string())),
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

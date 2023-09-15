@@ -34,6 +34,9 @@ The default path is `.github/settings.yml`.
 ```yaml
 # The repository's description
 description: "foo"
+topics:
+  - topic-1
+  - topic-2
 ```
 
 ### Recommended workflow

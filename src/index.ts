@@ -27,9 +27,16 @@ async function run(): Promise<void> {
   const { owner, repo } = context.repo;
   const api = new Api(octokit, owner, repo);
 
-  await api.modifyRepository({
-    description: settings.description,
-  });
+  // TODO Use `Promise.all` to run these in parallel.
+
+  const { description, topics } = settings;
+  if (description != null) {
+    await api.modifyRepository({ description });
+  }
+
+  if (topics != null) {
+    await api.replaceTopics(topics);
+  }
 }
 
 run();

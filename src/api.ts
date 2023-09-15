@@ -21,4 +21,15 @@ export class Api {
       ...attrs,
     });
   }
+
+  /**
+   * Replaces a repository's topics.
+   */
+  public async replaceTopics(topics: string[]): Promise<void> {
+    await this.octokit.request("PUT /repos/{owner}/{repo}/topics", {
+      owner: this.owner,
+      repo: this.repo,
+      names: topics,
+    });
+  }
 }

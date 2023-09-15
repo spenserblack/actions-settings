@@ -1,1 +1,5 @@
 description: "Version control a YAML file to update your repository's settings"
+topics:
+  - github-actions
+  - settings
+  - administration

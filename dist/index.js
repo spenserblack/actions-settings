@@ -33,6 +33,18 @@ class Api {
             yield this.octokit.request("PATCH /repos/{owner}/{repo}", Object.assign({ owner: this.owner, repo: this.repo }, attrs));
         });
     }
+    /**
+     * Replaces a repository's topics.
+     */
+    replaceTopics(topics) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.octokit.request("PUT /repos/{owner}/{repo}/topics", {
+                owner: this.owner,
+                repo: this.repo,
+                names: topics,
+            });
+        });
+    }
 }
 exports.Api = Api;
 
@@ -105,9 +117,14 @@ function run() {
         const octokit = (0, github_1.getOctokit)(token);
         const { owner, repo } = github_1.context.repo;
         const api = new api_1.Api(octokit, owner, repo);
-        yield api.modifyRepository({
-            description: settings.description,
-        });
+        // TODO Use `Promise.all` to run these in parallel.
+        const { description, topics } = settings;
+        if (description != null) {
+            yield api.modifyRepository({ description });
+        }
+        if (topics != null) {
+            yield api.replaceTopics(topics);
+        }
     });
 }
 run();
@@ -127,6 +144,7 @@ const js_yaml_1 = __nccwpck_require__(4072);
 const fs_1 = __nccwpck_require__(7147);
 const SettingsSchema = zod_1.z.object({
     description: zod_1.z.optional(zod_1.z.string()),
+    topics: zod_1.z.optional(zod_1.z.array(zod_1.z.string())),
 });
 function parse(value) {
     return SettingsSchema.parse(value);
