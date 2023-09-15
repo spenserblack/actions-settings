@@ -1,4 +1,4 @@
-name: Repository Settings
+name: Update Repository Settings
 description: "Version control a YAML file to update your repository's settings"
 branding:
   icon: settings
