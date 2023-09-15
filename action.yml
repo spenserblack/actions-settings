@@ -1,0 +1,17 @@
+name: Settings
+description: "Version control a YAML file to update your repository's settings"
+branding:
+  icon: settings
+  color: blue
+inputs:
+  token:
+    description: "The GitHub token to use"
+    required: true
+    default: ${{ github.token }}
+  path:
+    description: "The path to the settings file"
+    required: true
+    default: .github/settings.yml
+runs:
+  using: node20
+  main: "dist/index.js"
