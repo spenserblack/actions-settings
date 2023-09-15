@@ -30,3 +30,30 @@ The default path is `.github/settings.yml`.
 # The repository's description
 description: 'foo'
 ```
+
+### Recommended workflow
+
+```yaml
+# .github/workflows/settings.yml
+name: Update Settings
+
+# Limit the workflow to only run when the main
+# branch is changed and the settings file is one
+# of those changes
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - ".github/settings.yml"
+
+jobs:
+  settings:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: spenserblack/actions-settings@<REV>
+        with:
+          token: ${{ secrets.SETTINGS_PAT }}
+```
