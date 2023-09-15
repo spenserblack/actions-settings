@@ -23,6 +23,7 @@ settings. It is recommended to create a fine-grained token and limit it to only 
 repositories.
 
 The PAT will need administration rights to modify
+
 - The description
 - Topics
 
@@ -32,7 +33,7 @@ The default path is `.github/settings.yml`.
 
 ```yaml
 # The repository's description
-description: 'foo'
+description: "foo"
 ```
 
 ### Recommended workflow
