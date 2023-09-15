@@ -1,0 +1,21 @@
+{
+  "name": "Node.js",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/pnpm:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig", "esbenp.prettier-vscode"],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "prettier.configPath": ".prettierrc.json",
+        "prettier.prettierPath": "pnpm prettier",
+        "prettier.requireConfig": true
+      }
+    }
+  },
+  "postCreateCommand": "pnpm install",
+  "remoteUser": "node"
+}
