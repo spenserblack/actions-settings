@@ -16,6 +16,17 @@ a user trusted with push access to modify.
 
 ## Usage
 
+### Using a PAT
+
 You must generate a personal access token, as this action needs heightened permissions to modify
 settings. It is recommended to create a fine-grained token and limit it to only relevant
-repositories
+repositories.
+
+### The settings file
+
+The default path is `.github/settings.yml`.
+
+```yaml
+# The repository's description
+description: 'foo'
+```
