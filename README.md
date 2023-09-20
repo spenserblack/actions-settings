@@ -16,17 +16,6 @@ a user trusted with push access to modify.
 
 ## Usage
 
-### Using a PAT
-
-You must generate a personal access token (PAT), as this action needs heightened permissions to modify
-settings. It is recommended to create a fine-grained token and limit it to only relevant
-repositories.
-
-The PAT will need administration rights to modify
-
-- The description
-- Topics
-
 ### The settings file
 
 The default path is `.github/settings.yml`.
@@ -38,6 +27,19 @@ topics:
   - topic-1
   - topic-2
 ```
+
+### Permissions
+
+Not all settings can be modified with `secrets.GITHUB_TOKEN`, and some will require setting up a
+personal access token (PAT). Unless otherwise stated, the "write" permission level is required, not
+the read permission level.
+
+|   setting   | required permission |
+| :---------: | :-----------------: |
+| description |   administration    |
+|   topics    |   administration    |
+
+For more information, you can review the [permissions required for GitHub Apps][permissions-docs].
 
 ### Recommended workflow
 
@@ -65,3 +67,5 @@ jobs:
         with:
           token: ${{ secrets.SETTINGS_PAT }}
 ```
+
+[permissions-docs]: https://docs.github.com/en/rest/overview/permissions-required-for-github-apps
