@@ -2,22 +2,16 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 4174:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Api = void 0;
 class Api {
+    octokit;
+    owner;
+    repo;
     constructor(octokit, owner, repo) {
         this.octokit = octokit;
         this.owner = owner;
@@ -28,71 +22,71 @@ class Api {
      *
      * Requires a token with permission for repository administration.
      */
-    modifyRepository(attrs) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.octokit.request("PATCH /repos/{owner}/{repo}", Object.assign({ owner: this.owner, repo: this.repo }, attrs));
+    async modifyRepository(attrs) {
+        await this.octokit.request("PATCH /repos/{owner}/{repo}", {
+            owner: this.owner,
+            repo: this.repo,
+            ...attrs,
         });
     }
     /**
      * Replaces a repository's topics.
      */
-    replaceTopics(topics) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.octokit.request("PUT /repos/{owner}/{repo}/topics", {
-                owner: this.owner,
-                repo: this.repo,
-                names: topics,
-            });
+    async replaceTopics(topics) {
+        await this.octokit.request("PUT /repos/{owner}/{repo}/topics", {
+            owner: this.owner,
+            repo: this.repo,
+            names: topics,
         });
     }
     /**
      * Get a repository's labels.
      */
-    getLabels() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { data } = yield this.octokit.request("GET /repos/{owner}/{repo}/labels", {
-                owner: this.owner,
-                repo: this.repo,
-            });
-            const labels = data.map(({ name }) => name);
-            return new Set(labels);
+    async getLabels() {
+        const { data } = await this.octokit.request("GET /repos/{owner}/{repo}/labels", {
+            owner: this.owner,
+            repo: this.repo,
         });
+        const labels = data.map(({ name }) => name);
+        return new Set(labels);
     }
     /**
      * Updates the repository's labels.
      */
-    updateLabels(labels) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const existing = yield this.getLabels();
-            const normalized = labels.map(Api.normalizeLabel);
-            const promises = normalized.map((label) => __awaiter(this, void 0, void 0, function* () {
-                const exists = existing.has(label.name);
-                if (!exists) {
-                    return yield this.createLabel(label);
-                }
-                // NOTE If the color is not set, do not update it.
-                if (!label.color) {
-                    return;
-                }
-                return yield this.updateLabel(label);
-            }));
-            yield Promise.all(promises);
+    async updateLabels(labels) {
+        const existing = await this.getLabels();
+        const normalized = labels.map(Api.normalizeLabel);
+        const promises = normalized.map(async (label) => {
+            const exists = existing.has(label.name);
+            if (!exists) {
+                return await this.createLabel(label);
+            }
+            // NOTE If the color is not set, do not update it.
+            if (!label.color) {
+                return;
+            }
+            return await this.updateLabel(label);
         });
+        await Promise.all(promises);
     }
     /**
      * Creates a label.
      */
-    createLabel(label) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.octokit.request("POST /repos/{owner}/{repo}/labels", Object.assign({ owner: this.owner, repo: this.repo }, label));
+    async createLabel(label) {
+        await this.octokit.request("POST /repos/{owner}/{repo}/labels", {
+            owner: this.owner,
+            repo: this.repo,
+            ...label,
         });
     }
     /**
      * Updates a label.
      */
-    updateLabel(label) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.octokit.request("PATCH /repos/{owner}/{repo}/labels/{name}", Object.assign({ owner: this.owner, repo: this.repo }, label));
+    async updateLabel(label) {
+        await this.octokit.request("PATCH /repos/{owner}/{repo}/labels/{name}", {
+            owner: this.owner,
+            repo: this.repo,
+            ...label,
         });
     }
     static normalizeLabel(label) {
@@ -132,56 +126,45 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(8434));
 const settings_1 = __nccwpck_require__(2145);
 const zod_1 = __nccwpck_require__(3563);
 const api_1 = __nccwpck_require__(4174);
 const github_1 = __nccwpck_require__(5248);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const token = core.getInput("token", { required: true });
-        const settingsPath = core.getInput("path", { required: true });
-        let settings;
-        try {
-            settings = (0, settings_1.loadFile)(settingsPath);
+async function run() {
+    const token = core.getInput("token", { required: true });
+    const settingsPath = core.getInput("path", { required: true });
+    let settings;
+    try {
+        settings = (0, settings_1.loadFile)(settingsPath);
+    }
+    catch (error) {
+        core.setFailed("Failed to load settings file");
+        if (error instanceof zod_1.ZodError) {
+            error.errors.forEach((error) => {
+                core.error(error.message);
+            });
         }
-        catch (error) {
-            core.setFailed("Failed to load settings file");
-            if (error instanceof zod_1.ZodError) {
-                error.errors.forEach((error) => {
-                    core.error(error.message);
-                });
-            }
-            else {
-                core.error(error);
-            }
-            return;
+        else {
+            core.error(error);
         }
-        const octokit = (0, github_1.getOctokit)(token);
-        const { owner, repo } = github_1.context.repo;
-        const api = new api_1.Api(octokit, owner, repo);
-        // TODO Use `Promise.all` to run these in parallel.
-        const { description, topics, labels } = settings;
-        if (description != null) {
-            yield api.modifyRepository({ description });
-        }
-        if (topics != null) {
-            yield api.replaceTopics(topics);
-        }
-        if (labels != null) {
-            yield api.updateLabels(labels);
-        }
-    });
+        return;
+    }
+    const octokit = (0, github_1.getOctokit)(token);
+    const { owner, repo } = github_1.context.repo;
+    const api = new api_1.Api(octokit, owner, repo);
+    // TODO Use `Promise.all` to run these in parallel.
+    const { description, topics, labels } = settings;
+    if (description != null) {
+        await api.modifyRepository({ description });
+    }
+    if (topics != null) {
+        await api.replaceTopics(topics);
+    }
+    if (labels != null) {
+        await api.updateLabels(labels);
+    }
 }
 run();
 
