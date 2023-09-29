@@ -5,6 +5,18 @@ import { readFileSync } from "fs";
 const SettingsSchema = z.object({
   description: z.optional(z.string()),
   topics: z.optional(z.array(z.string())),
+  labels: z.optional(
+    z.array(
+      z.union([
+        z.string(),
+        z.object({
+          name: z.string(),
+          color: z.optional(z.string()),
+          description: z.optional(z.string()),
+        }),
+      ]),
+    ),
+  ),
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

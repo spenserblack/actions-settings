@@ -29,13 +29,17 @@ async function run(): Promise<void> {
 
   // TODO Use `Promise.all` to run these in parallel.
 
-  const { description, topics } = settings;
+  const { description, topics, labels } = settings;
   if (description != null) {
     await api.modifyRepository({ description });
   }
 
   if (topics != null) {
     await api.replaceTopics(topics);
+  }
+
+  if (labels != null) {
+    await api.updateLabels(labels);
   }
 }
 

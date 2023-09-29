@@ -45,6 +45,59 @@ class Api {
             });
         });
     }
+    /**
+     * Get a repository's labels.
+     */
+    getLabels() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data } = yield this.octokit.request("GET /repos/{owner}/{repo}/labels", {
+                owner: this.owner,
+                repo: this.repo,
+            });
+            const labels = data.map(({ name }) => name);
+            return new Set(labels);
+        });
+    }
+    /**
+     * Updates the repository's labels.
+     */
+    updateLabels(labels) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const existing = yield this.getLabels();
+            const normalized = labels.map(Api.normalizeLabel);
+            const promises = normalized.map((label) => __awaiter(this, void 0, void 0, function* () {
+                const exists = existing.has(label.name);
+                if (!exists) {
+                    return yield this.createLabel(label);
+                }
+                // NOTE If the color is not set, do not update it.
+                if (!label.color) {
+                    return;
+                }
+                return yield this.updateLabel(label);
+            }));
+            yield Promise.all(promises);
+        });
+    }
+    /**
+     * Creates a label.
+     */
+    createLabel(label) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.octokit.request("POST /repos/{owner}/{repo}/labels", Object.assign({ owner: this.owner, repo: this.repo }, label));
+        });
+    }
+    /**
+     * Updates a label.
+     */
+    updateLabel(label) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.octokit.request("PATCH /repos/{owner}/{repo}/labels/{name}", Object.assign({ owner: this.owner, repo: this.repo }, label));
+        });
+    }
+    static normalizeLabel(label) {
+        return typeof label === "string" ? { name: label } : label;
+    }
 }
 exports.Api = Api;
 
@@ -118,12 +171,15 @@ function run() {
         const { owner, repo } = github_1.context.repo;
         const api = new api_1.Api(octokit, owner, repo);
         // TODO Use `Promise.all` to run these in parallel.
-        const { description, topics } = settings;
+        const { description, topics, labels } = settings;
         if (description != null) {
             yield api.modifyRepository({ description });
         }
         if (topics != null) {
             yield api.replaceTopics(topics);
+        }
+        if (labels != null) {
+            yield api.updateLabels(labels);
         }
     });
 }
@@ -145,6 +201,14 @@ const fs_1 = __nccwpck_require__(7147);
 const SettingsSchema = zod_1.z.object({
     description: zod_1.z.optional(zod_1.z.string()),
     topics: zod_1.z.optional(zod_1.z.array(zod_1.z.string())),
+    labels: zod_1.z.optional(zod_1.z.array(zod_1.z.union([
+        zod_1.z.string(),
+        zod_1.z.object({
+            name: zod_1.z.string(),
+            color: zod_1.z.optional(zod_1.z.string()),
+            description: zod_1.z.optional(zod_1.z.string()),
+        }),
+    ]))),
 });
 function parse(value) {
     return SettingsSchema.parse(value);
