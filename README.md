@@ -26,6 +26,13 @@ description: "foo"
 topics:
   - topic-1
   - topic-2
+labels:
+  # Just provide the name to use a randomized color
+  - invalid
+  # Or specify the color
+  - name: triage
+    # Make sure to quote the color so that it is always interpreted as a string
+    color: "ABC123"
 ```
 
 ### Permissions
@@ -38,6 +45,7 @@ the read permission level.
 | :---------: | :-----------------: |
 | description |   administration    |
 |   topics    |   administration    |
+|   labels    |       issues        |
 
 For more information, you can review the [permissions required for GitHub Apps][permissions-docs].
 

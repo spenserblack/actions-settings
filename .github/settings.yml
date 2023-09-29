@@ -3,3 +3,14 @@ topics:
   - github-actions
   - settings
   - administration
+labels:
+  - name: semver-major
+    color: "AA0000"
+    description: PRs that have breaking changes
+  - name: semver-minor
+    color: "44AA00"
+    description: PRs that introduce new features
+  - name: semver-patch
+    color: "00AAAA"
+    description: PRs that change/fix internals
+  - discussion
