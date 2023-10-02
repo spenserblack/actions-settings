@@ -41,11 +41,13 @@ Not all settings can be modified with `secrets.GITHUB_TOKEN`, and some will requ
 personal access token (PAT). Unless otherwise stated, the "write" permission level is required, not
 the read permission level.
 
-|   setting   | required permission |
-| :---------: | :-----------------: |
-| description |   administration    |
-|   topics    |   administration    |
-|   labels    |       issues        |
+|   setting   | required permission | needs PAT[^1] |
+| :---------: | :-----------------: | :-----------: |
+| description |   administration    |      yes      |
+|   topics    |   administration    |      yes      |
+|   labels    |       issues        |      no       |
+
+[^1]: If a PAT is not needed, you can use the `permissions` setting in the workflow file. See [the documentation for workflow syntax][workflow-syntax-docs] for more details.
 
 For more information, you can review the [permissions required for GitHub Apps][permissions-docs].
 
@@ -77,3 +79,4 @@ jobs:
 ```
 
 [permissions-docs]: https://docs.github.com/en/rest/overview/permissions-required-for-github-apps
+[workflow-syntax-docs]: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
